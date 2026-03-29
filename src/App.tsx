@@ -102,6 +102,16 @@ export default function App() {
     try { localStorage.setItem('darkMode', JSON.stringify(darkMode)); } catch {}
   }, [darkMode]);
 
+  // ── Help modal (Navbar) ───────────────────────────────────
+  const [showHelpModal, setShowHelpModal] = useState(false);
+  const [helpSubject, setHelpSubject] = useState('');
+  const [cart, setCart] = useState<{id: string, label: string, units: number, price: number, quantity: number}[]>([]);
+
+  // ── Help modal & cart (requis par Navbar) ───────────────────
+  const [showHelpModal, setShowHelpModal] = useState(false);
+  const [helpSubject, setHelpSubject] = useState('');
+  const [cart, setCart] = useState<{id: string, label: string, units: number, price: number, quantity: number}[]>([]);
+
   // ── Mr. Dent chatbot ──────────────────────────────────────
   const [isChatOpen, setIsChatOpen] = useState(false);
   const [chatInput, setChatInput] = useState('');
@@ -475,11 +485,24 @@ export default function App() {
         currentPage={currentPage}
         isAuthenticated={isAuthenticated}
         onLogout={handleLogout}
-        onLogin={() => { setAuthMode('login'); setCurrentPage('auth'); }}
         darkMode={darkMode}
-        onToggleDarkMode={() => setDarkMode(!darkMode)}
-        labName={currentLab?.name}
-        availableUnits={currentLab?.units ?? 0}
+        setDarkMode={setDarkMode}
+        showHelpModal={showHelpModal}
+        setShowHelpModal={setShowHelpModal}
+        helpSubject={helpSubject}
+        setHelpSubject={setHelpSubject}
+        cart={cart}
+        setCart={setCart}
+        onCheckout={() => setShowBuyUnitsModal(true)}
+        userData={{
+          firstName: currentLab?.name?.split(' ')[0] ?? 'Mon',
+          lastName: currentLab?.name?.split(' ').slice(1).join(' ') ?? 'Compte',
+          email: currentLab?.email ?? '',
+          companyName: currentLab?.name ?? '',
+          siret: '',
+          billingAddress: '',
+          businessType: 'laboratoire',
+        }}
       />
 
       <main className="max-w-7xl mx-auto px-6 py-8">
