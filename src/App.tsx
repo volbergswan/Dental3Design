@@ -107,11 +107,6 @@ export default function App() {
   const [helpSubject, setHelpSubject] = useState('');
   const [cart, setCart] = useState<{id: string, label: string, units: number, price: number, quantity: number}[]>([]);
 
-  // ── Help modal & cart (requis par Navbar) ───────────────────
-  const [showHelpModal, setShowHelpModal] = useState(false);
-  const [helpSubject, setHelpSubject] = useState('');
-  const [cart, setCart] = useState<{id: string, label: string, units: number, price: number, quantity: number}[]>([]);
-
   // ── Mr. Dent chatbot ──────────────────────────────────────
   const [isChatOpen, setIsChatOpen] = useState(false);
   const [chatInput, setChatInput] = useState('');
