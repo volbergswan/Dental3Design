@@ -39,22 +39,22 @@ export const ProsthesisSelector: React.FC<ProsthesisSelectorProps> = ({ activeTe
               onClick={() => onToggle(type.id)}
               className={`flex items-center gap-3 p-3 rounded-xl border transition-all text-left group relative ${
                 isAll
-                  ? 'bg-blue-50 border-blue-200 ring-1 ring-blue-200'
+                  ? 'bg-blue-50 dark:bg-blue-900/20 border-blue-200 dark:border-blue-800 ring-1 ring-blue-200 dark:ring-blue-800'
                   : isSome
-                  ? 'bg-blue-50/30 border-blue-100 border-dashed'
-                  : 'bg-white border-gray-100 hover:border-gray-200 hover:bg-gray-50'
+                  ? 'bg-blue-50/30 dark:bg-blue-900/10 border-blue-100 dark:border-blue-900 border-dashed'
+                  : 'bg-white dark:bg-slate-800 border-gray-100 dark:border-slate-800 hover:border-gray-200 dark:hover:border-slate-700 hover:bg-gray-50 dark:hover:bg-slate-700/50'
               }`}
             >
               <div className={`w-10 h-10 rounded-lg flex items-center justify-center transition-colors ${
-                isAll ? 'bg-blue-600 text-white' : isSome ? 'bg-blue-400 text-white' : 'bg-gray-100 text-gray-500 group-hover:bg-gray-200'
+                isAll ? 'bg-blue-600 text-white' : isSome ? 'bg-blue-400 text-white' : 'bg-gray-100 dark:bg-slate-700 text-gray-500 dark:text-slate-400 group-hover:bg-gray-200 dark:group-hover:bg-slate-600'
               }`}>
                 {type.icon}
               </div>
               <div className="flex-1">
-                <p className={`text-sm font-semibold ${isAll ? 'text-blue-900' : isSome ? 'text-blue-700' : 'text-slate-700'}`}>
+                <p className={`text-sm font-semibold ${isAll ? 'text-blue-900 dark:text-blue-100' : isSome ? 'text-blue-700 dark:text-blue-300' : 'text-slate-700 dark:text-slate-200'}`}>
                   {type.label}
                 </p>
-                <p className="text-[10px] text-gray-500 font-medium uppercase tracking-wider">
+                <p className="text-[10px] text-gray-500 dark:text-slate-500 font-medium uppercase tracking-wider">
                   {type.cost} Units
                   {(type.id === 'wax_up' || type.id === 'barre') && (
                     <span className="ml-1 lowercase italic opacity-70">

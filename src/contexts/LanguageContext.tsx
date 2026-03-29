@@ -56,6 +56,8 @@ interface Translations {
   sendMessage: string;
   messagePlaceholder: string;
   messageSent: string;
+  chatInitialMessage: string;
+  chatBotResponse: string;
   subjectLabel: string;
   subjectPlaceholder: string;
   insufficientUnitsTitle: string;
@@ -120,7 +122,36 @@ interface Translations {
   error3DMessage: string;
   loading3D: string;
   no3DFile: string;
-  viewDetails: string;
+  pendingCaseEditNotice: string;
+  uploadNewStl: string;
+  actionRequired: string;
+  updateFiles: string;
+  updateCase: string;
+  phoneNumber: string;
+  newPassword: string;
+  saveChanges: string;
+  deleteAccount: string;
+  deleteAccountConfirm: string;
+  profileSummary: string;
+  accountDeleted: string;
+  firstName: string;
+  lastName: string;
+  companyName: string;
+  siret: string;
+  billingAddress: string;
+  businessType: string;
+  edit: string;
+  password: string;
+  oldPassword: string;
+  confirmNewPassword: string;
+  passwordChanged: string;
+  phoneChanged: string;
+  passwordConfirmError: string;
+  dailyLimitAlert: string;
+  dailyLimitReachedTitle: string;
+  dailyLimitReachedMessage: string;
+  statWaiting: string;
+  statusWaiting: string;
 }
 
 const translations: Record<Language, Translations> = {
@@ -178,6 +209,8 @@ const translations: Record<Language, Translations> = {
     sendMessage: "Envoyer le message",
     messagePlaceholder: "Écrivez votre message ici...",
     messageSent: "Votre message a bien été envoyé et sera traité dans les plus brefs délais.",
+    chatInitialMessage: "Bonjour, je suis votre assistant Mr.Dent, comment puis-je vous aider ?",
+    chatBotResponse: "Merci pour votre message. Un conseiller Mr.Dent va vous répondre dans quelques instants.",
     subjectLabel: "Objet de la demande",
     subjectPlaceholder: "",
     insufficientUnitsTitle: "Units insuffisantes",
@@ -200,17 +233,18 @@ const translations: Record<Language, Translations> = {
     perTooth: "par dent",
     perPilier: "par pilier",
     perImplant: "par implant",
-    statusInProgress: "En cours",
+    statusInProgress: "En cours de traitement",
     statusCompleted: "Terminé",
-    statusPending: "En attente",
+    statusPending: "En attente d'un fichier",
+    statusWaiting: "En attente",
     caseInProgressTitle: "Conception en cours",
     casePendingTitle: "En attente de traitement",
     caseInProgressMessage: "Nos designers travaillent actuellement sur votre cas. Vous recevrez une notification dès qu'il sera prêt.",
     casePendingMessage: "Votre cas a bien été reçu et sera bientôt pris en charge par l'un de nos designers.",
     close: "Fermer",
-    statInProgress: "Cas en cours",
+    statInProgress: "En cours de traitement",
     statCompleted: "Terminés (30j)",
-    statPending: "En attente",
+    statPending: "En attente d'un fichier",
     statTotal: "Total Designs",
     myCasesTitle: "Mes cas",
     welcomeMessage: "Bienvenue sur votre espace Dental3Design.",
@@ -242,7 +276,35 @@ const translations: Record<Language, Translations> = {
     error3DMessage: "Le fichier STL n'a pas pu être chargé ou est corrompu.",
     loading3D: "Chargement...",
     no3DFile: "Aucun fichier 3D disponible",
-    viewDetails: "Voir les détails"
+    pendingCaseEditNotice: "Ce cas est en attente car il manque des fichiers ou des instructions nécessaires à la conception du cas.",
+    uploadNewStl: "Déposer les nouveaux fichiers",
+    actionRequired: "Action requise",
+    updateFiles: "Mettre à jour les fichiers",
+    updateCase: "Mettre à jour le dossier",
+    phoneNumber: "Numéro de téléphone",
+    newPassword: "Nouveau mot de passe",
+    saveChanges: "Enregistrer les modifications",
+    deleteAccount: "Supprimer le compte",
+    deleteAccountConfirm: "Êtes-vous sûr de vouloir supprimer votre compte ? Cette action est irréversible.",
+    profileSummary: "Résumé du profil",
+    accountDeleted: "Compte supprimé avec succès",
+    firstName: "Prénom",
+    lastName: "Nom",
+    companyName: "Nom de l'entreprise",
+    siret: "SIRET",
+    billingAddress: "Adresse de facturation",
+    businessType: "Type d'établissement",
+    edit: "Modifier",
+    password: "Mot de passe",
+    oldPassword: "Ancien mot de passe",
+    confirmNewPassword: "Confirmer le nouveau mot de passe",
+    passwordChanged: "Mot de passe modifié avec succès",
+    phoneChanged: "Numéro de téléphone modifié avec succès",
+    passwordConfirmError: "Les nouveaux mots de passe ne correspondent pas",
+    dailyLimitAlert: "Dans le cadre de l'optimisation de notre service, un maximum de 4 commandes par jour est appliqué",
+    dailyLimitReachedTitle: "Limite quotidienne atteinte",
+    dailyLimitReachedMessage: "Vous avez atteint la limite de 4 commandes par jour. Veuillez revenir demain pour soumettre de nouveaux cas.",
+    statWaiting: "En attente",
   },
   en: {
     dashboard: "Dashboard",
@@ -298,6 +360,8 @@ const translations: Record<Language, Translations> = {
     sendMessage: "Send message",
     messagePlaceholder: "Write your message here...",
     messageSent: "Your message has been sent and will be processed as soon as possible.",
+    chatInitialMessage: "Hello, I am your assistant Mr.Dent, how can I help you?",
+    chatBotResponse: "Thank you for your message. A Mr.Dent advisor will get back to you in a few moments.",
     subjectLabel: "Subject",
     subjectPlaceholder: "",
     insufficientUnitsTitle: "Insufficient Units",
@@ -320,20 +384,21 @@ const translations: Record<Language, Translations> = {
     perTooth: "per tooth",
     perPilier: "per abutment",
     perImplant: "per implant",
-    statusInProgress: "In Progress",
+    statusInProgress: "Processing",
     statusCompleted: "Completed",
-    statusPending: "Pending",
+    statusPending: "Pending Files",
+    statusWaiting: "Waiting",
     caseInProgressTitle: "Design in Progress",
     casePendingTitle: "Pending Processing",
     caseInProgressMessage: "Our designers are currently working on your case. You will receive a notification as soon as it is ready.",
     casePendingMessage: "Your case has been received and will soon be handled by one of our designers.",
     close: "Close",
-    statInProgress: "In Progress",
+    statInProgress: "Processing",
     statCompleted: "Completed (30d)",
-    statPending: "Pending",
+    statPending: "Pending Files",
     statTotal: "Total Designs",
     myCasesTitle: "My cases",
-    welcomeMessage: "Welcome to your Dental3Design workspace.",
+    welcomeMessage: "Welcome to your Dental3Design space.",
     quickActionsTitle: "Quick Actions",
     pricingLabel: "Pricing",
     libraryLabel: "Library",
@@ -362,7 +427,35 @@ const translations: Record<Language, Translations> = {
     error3DMessage: "The STL file could not be loaded or is corrupted.",
     loading3D: "Loading...",
     no3DFile: "No 3D file available",
-    viewDetails: "View details"
+    pendingCaseEditNotice: "This case is pending because files or instructions necessary for the design are missing.",
+    uploadNewStl: "Upload New Files",
+    actionRequired: "Action Required",
+    updateFiles: "Update Files",
+    updateCase: "Update Case",
+    phoneNumber: " Phone Number",
+    newPassword: "New Password",
+    saveChanges: "Save Changes",
+    deleteAccount: "Delete Account",
+    deleteAccountConfirm: "Are you sure you want to delete your account? This action is irreversible.",
+    profileSummary: "Profile Summary",
+    accountDeleted: "Account successfully deleted",
+    firstName: "First Name",
+    lastName: "Last Name",
+    companyName: "Company Name",
+    siret: "SIRET",
+    billingAddress: "Billing Address",
+    businessType: "Business Type",
+    edit: "Edit",
+    password: "Password",
+    oldPassword: "Old Password",
+    confirmNewPassword: "Confirm New Password",
+    passwordChanged: "Password changed successfully",
+    phoneChanged: "Phone number changed successfully",
+    passwordConfirmError: "New passwords do not match",
+    dailyLimitAlert: "As part of our service optimization, a maximum of 4 orders per day is applied",
+    dailyLimitReachedTitle: "Daily Limit Reached",
+    dailyLimitReachedMessage: "You have reached the limit of 4 orders per day. Please come back tomorrow to submit new cases.",
+    statWaiting: "Waiting",
   },
   es: {
     dashboard: "Tablero",
@@ -418,6 +511,8 @@ const translations: Record<Language, Translations> = {
     sendMessage: "Enviar mensaje",
     messagePlaceholder: "Escriba su mensaje aquí...",
     messageSent: "Su mensaje ha sido enviado y será procesado lo antes posible.",
+    chatInitialMessage: "Hola, soy su asistente Mr.Dent, ¿cómo puedo ayudarle?",
+    chatBotResponse: "Gracias por su mensaje. Un asesor de Mr.Dent le responderá en unos instantes.",
     subjectLabel: "Asunto",
     subjectPlaceholder: "",
     insufficientUnitsTitle: "Units insuficientes",
@@ -440,20 +535,21 @@ const translations: Record<Language, Translations> = {
     perTooth: "por diente",
     perPilier: "por pilar",
     perImplant: "por implante",
-    statusInProgress: "En curso",
+    statusInProgress: "En proceso de tratamiento",
     statusCompleted: "Completado",
-    statusPending: "Pendiente",
+    statusPending: "Pendiente de un archivo",
+    statusWaiting: "En espera",
     caseInProgressTitle: "Diseño en curso",
     casePendingTitle: "Pendiente de procesamiento",
     caseInProgressMessage: "Nuestros diseñadores están trabajando actualmente en su caso. Recibirá una notificación tan pronto como esté listo.",
     casePendingMessage: "Su caso ha sido recibido y pronto será atendido por uno de nuestros diseñadores.",
     close: "Cerrar",
-    statInProgress: "Casos en curso",
+    statInProgress: "En proceso de tratamiento",
     statCompleted: "Completados (30d)",
-    statPending: "Pendientes",
+    statPending: "Pendientes de un archivo",
     statTotal: "Total Diseños",
     myCasesTitle: "Mis casos",
-    welcomeMessage: "Bienvenido a su espacio de diseño Dental3Design.",
+    welcomeMessage: "Bienvenido a su espacio Dental3Design.",
     quickActionsTitle: "Acciones rápidas",
     pricingLabel: "Tarifas",
     libraryLabel: "Biblioteca",
@@ -482,7 +578,35 @@ const translations: Record<Language, Translations> = {
     error3DMessage: "El archivo STL no se pudo cargar o está dañado.",
     loading3D: "Cargando...",
     no3DFile: "No hay archivo 3D disponible",
-    viewDetails: "Ver detalles"
+    pendingCaseEditNotice: "Este caso está pendiente porque faltan archivos o instrucciones necesarias para el diseño.",
+    uploadNewStl: "Subir nuevos archivos",
+    actionRequired: "Acción requerida",
+    updateFiles: "Actualizar archivos",
+    updateCase: "Actualizar caso",
+    phoneNumber: "Número de teléfono",
+    newPassword: "Nueva contraseña",
+    saveChanges: "Guardar cambios",
+    deleteAccount: "Eliminar cuenta",
+    deleteAccountConfirm: "¿Estás seguro de que quieres eliminar tu cuenta? Esta acción es irreversible.",
+    profileSummary: "Resumen del perfil",
+    accountDeleted: "Cuenta eliminada con éxito",
+    firstName: "Nombre",
+    lastName: "Apellido",
+    companyName: "Nombre de la empresa",
+    siret: "SIRET",
+    billingAddress: "Dirección de facturación",
+    businessType: "Tipo de establecimiento",
+    edit: "Editar",
+    password: "Contraseña",
+    oldPassword: "Contraseña anterior",
+    confirmNewPassword: "Confirmar nueva contraseña",
+    passwordChanged: "Contraseña cambiada con éxito",
+    phoneChanged: "Número de teléfono cambiado con éxito",
+    passwordConfirmError: "Las nuevas contraseñas no coinciden",
+    dailyLimitAlert: "Como parte de la optimización de nuestro servicio, se aplica un máximo de 4 pedidos por día",
+    dailyLimitReachedTitle: "Límite diario alcanzado",
+    dailyLimitReachedMessage: "Ha alcanzado el límite de 4 pedidos por día. Por favor, vuelva mañana para enviar nuevos casos.",
+    statWaiting: "En espera",
   }
 };
 

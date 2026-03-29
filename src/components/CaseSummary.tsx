@@ -38,11 +38,11 @@ export const CaseSummary: React.FC<CaseSummaryProps> = ({ selectedTeeth, toothSe
   }, 0);
 
   return (
-    <div className="bg-white border border-gray-100 rounded-2xl p-6 shadow-sm">
+    <div className="bg-white dark:bg-slate-900 border border-gray-100 dark:border-slate-800 rounded-2xl p-6 shadow-sm transition-colors duration-300">
       <div className="flex items-center justify-between mb-6">
-        <h3 className="text-lg font-bold text-slate-800">{t('caseSummary')}</h3>
+        <h3 className="text-lg font-bold text-slate-800 dark:text-slate-100">{t('caseSummary')}</h3>
         <div className="flex items-center gap-2">
-          <span className="text-[10px] font-bold text-blue-600 bg-blue-50 px-2 py-1 rounded-full">
+          <span className="text-[10px] font-bold text-blue-600 dark:text-blue-400 bg-blue-50 dark:bg-blue-900/30 px-2 py-1 rounded-full">
             {toothEntries.length} {t('teeth')}
           </span>
         </div>
@@ -54,21 +54,21 @@ export const CaseSummary: React.FC<CaseSummaryProps> = ({ selectedTeeth, toothSe
             {toothEntries.map((entry) => {
               const hasOtherProsthesis = entry.prostheses.some(p => p.id !== 'modeles');
               return (
-                <div key={entry.number} className="pb-4 border-b border-gray-50 last:border-0">
+                <div key={entry.number} className="pb-4 border-b border-gray-50 dark:border-slate-800 last:border-0">
                   <div className="flex justify-between items-center mb-2">
                     <div className="flex items-center gap-2">
                       <span className={`text-xs font-black px-2 py-1 rounded ${
                         invalidTeeth.includes(entry.number) 
-                          ? 'text-red-600 bg-red-50' 
-                          : 'text-blue-600 bg-blue-50'
+                          ? 'text-red-600 dark:text-red-400 bg-red-50 dark:bg-red-900/20' 
+                          : 'text-blue-600 dark:text-blue-400 bg-blue-50 dark:bg-blue-900/20'
                       }`}>
                         {t('item')} {entry.number}
                       </span>
                       {invalidTeeth.includes(entry.number) && (
-                        <AlertCircle size={14} className="text-red-500" />
+                        <AlertCircle size={14} className="text-red-500 dark:text-red-400" />
                       )}
                     </div>
-                    <span className="text-[10px] font-bold text-gray-400 uppercase tracking-wider">
+                    <span className="text-[10px] font-bold text-gray-400 dark:text-slate-500 uppercase tracking-wider">
                       {entry.prostheses.length} {t('items')}
                     </span>
                   </div>
@@ -81,23 +81,23 @@ export const CaseSummary: React.FC<CaseSummaryProps> = ({ selectedTeeth, toothSe
                         }
                         return (
                           <div key={p.id} className="flex justify-between items-center text-sm">
-                            <div className="flex items-center gap-2 text-slate-700 font-medium">
-                              <span className="text-gray-400">{p.icon}</span>
+                            <div className="flex items-center gap-2 text-slate-700 dark:text-slate-300 font-medium">
+                              <span className="text-gray-400 dark:text-slate-500">{p.icon}</span>
                               <div className="flex flex-col">
                                 <span>{p.label}</span>
                                 {(p.id === 'wax_up' || p.id === 'barre') && (
-                                  <span className="text-[9px] text-gray-400 italic font-normal lowercase">
+                                  <span className="text-[9px] text-gray-400 dark:text-slate-500 italic font-normal lowercase">
                                     {p.id === 'wax_up' ? t('perTooth') : p.id === 'barre' ? t('perImplant') : t('perPilier')}
                                   </span>
                                 )}
                               </div>
                             </div>
-                            <span className="text-gray-500 font-bold text-xs">{displayCost} U</span>
+                            <span className="text-gray-500 dark:text-slate-400 font-bold text-xs">{displayCost} U</span>
                           </div>
                         );
                       })
                     ) : (
-                      <p className="text-xs text-amber-500 italic font-medium">{t('noProsthesisSelected')}</p>
+                      <p className="text-xs text-amber-500 dark:text-amber-400 italic font-medium">{t('noProsthesisSelected')}</p>
                     )}
                   </div>
                 </div>
@@ -110,18 +110,18 @@ export const CaseSummary: React.FC<CaseSummaryProps> = ({ selectedTeeth, toothSe
           </div>
         )}
 
-        <div className="pt-4 border-t border-gray-100">
+        <div className="pt-4 border-t border-gray-100 dark:border-slate-800">
           {invalidTeeth.length > 0 && (
-            <div className="mb-4 p-3 bg-red-50 border border-red-100 rounded-xl flex items-start gap-2">
-              <AlertCircle size={16} className="text-red-600 mt-0.5 shrink-0" />
-              <p className="text-[10px] text-red-800 leading-tight">
+            <div className="mb-4 p-3 bg-red-50 dark:bg-red-900/20 border border-red-100 dark:border-red-900/30 rounded-xl flex items-start gap-2">
+              <AlertCircle size={16} className="text-red-600 dark:text-red-400 mt-0.5 shrink-0" />
+              <p className="text-[10px] text-red-800 dark:text-red-200 leading-tight">
                 <span className="font-bold">{t('validationError')}:</span> {t('ponticRuleError')}
               </p>
             </div>
           )}
           <div className="flex justify-between items-center">
-            <p className="text-sm font-semibold text-gray-500">{t('totalCost')}</p>
-            <p className="text-2xl font-black text-slate-900">{totalCost} Units</p>
+            <p className="text-sm font-semibold text-gray-500 dark:text-slate-400">{t('totalCost')}</p>
+            <p className="text-2xl font-black text-slate-900 dark:text-slate-100">{totalCost} Units</p>
           </div>
         </div>
       </div>

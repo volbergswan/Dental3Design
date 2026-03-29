@@ -109,7 +109,7 @@ export const PromoVideo: React.FC = () => {
       <motion.div 
         initial={{ opacity: 0, scale: 0.95 }}
         animate={{ opacity: 1, scale: 1 }}
-        className="w-full max-w-4xl mx-auto my-12 overflow-hidden rounded-[2.5rem] shadow-2xl border-8 border-white bg-slate-200 aspect-video relative group"
+        className="w-full max-w-4xl mx-auto my-12 overflow-hidden rounded-[2.5rem] shadow-2xl border-8 border-white dark:border-slate-800 bg-slate-200 dark:bg-slate-900 aspect-video relative group"
       >
         <iframe
           className="w-full h-full"
@@ -131,13 +131,13 @@ export const PromoVideo: React.FC = () => {
 
   if (!hasKey) {
     return (
-      <div className="w-full max-w-2xl mx-auto my-8 p-8 bg-blue-50 rounded-3xl border-2 border-dashed border-blue-200 text-center">
-        <Key className="w-12 h-12 text-blue-600 mx-auto mb-4" />
-        <h3 className="text-xl font-black text-slate-900 mb-2">Générer la vidéo publicitaire</h3>
-        <p className="text-slate-600 mb-6 text-sm">
+      <div className="w-full max-w-2xl mx-auto my-8 p-8 bg-blue-50 dark:bg-blue-900/20 rounded-3xl border-2 border-dashed border-blue-200 dark:border-blue-800/50 text-center">
+        <Key className="w-12 h-12 text-blue-600 dark:text-blue-400 mx-auto mb-4" />
+        <h3 className="text-xl font-black text-slate-900 dark:text-slate-100 mb-2">Générer la vidéo publicitaire</h3>
+        <p className="text-slate-600 dark:text-slate-400 mb-6 text-sm">
           Pour générer la vidéo promotionnelle avec Veo, vous devez sélectionner une clé API Google Cloud payante.
           <br />
-          <a href="https://ai.google.dev/gemini-api/docs/billing" target="_blank" rel="noopener noreferrer" className="text-blue-600 underline">
+          <a href="https://ai.google.dev/gemini-api/docs/billing" target="_blank" rel="noopener noreferrer" className="text-blue-600 dark:text-blue-400 underline">
             En savoir plus sur la facturation
           </a>
         </p>
@@ -150,7 +150,7 @@ export const PromoVideo: React.FC = () => {
           </button>
           <button
             onClick={() => setShowYoutube(true)}
-            className="bg-white text-slate-900 border border-slate-200 px-8 py-4 rounded-2xl font-black transition-all flex items-center justify-center gap-3"
+            className="bg-white dark:bg-slate-800 text-slate-900 dark:text-slate-100 border border-slate-200 dark:border-slate-700 px-8 py-4 rounded-2xl font-black transition-all flex items-center justify-center gap-3"
           >
             <Youtube size={20} className="text-red-600" />
             Voir la vidéo YouTube
@@ -162,12 +162,12 @@ export const PromoVideo: React.FC = () => {
 
   if (isGenerating) {
     return (
-      <div className="w-full max-w-2xl mx-auto my-8 p-12 bg-white rounded-3xl border border-slate-100 shadow-xl text-center">
-        <Loader2 className="w-16 h-16 text-blue-600 animate-spin mx-auto mb-6" />
-        <h3 className="text-xl font-black text-slate-900 mb-4">Génération de votre vidéo</h3>
+      <div className="w-full max-w-2xl mx-auto my-8 p-12 bg-white dark:bg-slate-900 rounded-3xl border border-slate-100 dark:border-slate-800 shadow-xl text-center">
+        <Loader2 className="w-16 h-16 text-blue-600 dark:text-blue-400 animate-spin mx-auto mb-6" />
+        <h3 className="text-xl font-black text-slate-900 dark:text-slate-100 mb-4">Génération de votre vidéo</h3>
         <div className="space-y-4">
-          <p className="text-blue-600 font-bold animate-pulse">{status}</p>
-          <p className="text-slate-400 text-xs">
+          <p className="text-blue-600 dark:text-blue-400 font-bold animate-pulse">{status}</p>
+          <p className="text-slate-400 dark:text-slate-500 text-xs">
             Cette opération utilise l'intelligence artificielle Veo pour créer une vidéo unique. 
             Cela peut prendre entre 2 et 5 minutes.
           </p>
@@ -178,7 +178,7 @@ export const PromoVideo: React.FC = () => {
 
   if (videoUrl) {
     return (
-      <div className="w-full max-w-4xl mx-auto my-8 overflow-hidden rounded-3xl shadow-2xl border border-slate-100 bg-black group relative">
+      <div className="w-full max-w-4xl mx-auto my-8 overflow-hidden rounded-3xl shadow-2xl border border-slate-100 dark:border-slate-800 bg-black group relative">
         <video 
           src={videoUrl} 
           controls 
@@ -205,30 +205,30 @@ export const PromoVideo: React.FC = () => {
   }
 
   return (
-    <div className="w-full max-w-2xl mx-auto my-8 p-8 bg-white rounded-3xl border border-slate-100 shadow-lg text-center">
+    <div className="w-full max-w-2xl mx-auto my-8 p-8 bg-white dark:bg-slate-900 rounded-3xl border border-slate-100 dark:border-slate-800 shadow-lg text-center">
       {error && (
-        <div className="mb-6 p-4 bg-red-50 text-red-600 rounded-2xl flex items-center gap-3 text-sm font-medium">
+        <div className="mb-6 p-4 bg-red-50 dark:bg-red-900/20 text-red-600 dark:text-red-400 rounded-2xl flex items-center gap-3 text-sm font-medium">
           <AlertCircle size={20} />
           {error}
         </div>
       )}
-      <div className="w-20 h-20 bg-blue-50 rounded-3xl flex items-center justify-center text-blue-600 mx-auto mb-6">
+      <div className="w-20 h-20 bg-blue-50 dark:bg-blue-900/20 rounded-3xl flex items-center justify-center text-blue-600 dark:text-blue-400 mx-auto mb-6">
         <Play size={40} fill="currentColor" />
       </div>
-      <h3 className="text-2xl font-black text-slate-900 mb-2">Prêt à générer votre pub ?</h3>
-      <p className="text-slate-500 mb-8 max-w-md mx-auto">
+      <h3 className="text-2xl font-black text-slate-900 dark:text-slate-100 mb-2">Prêt à générer votre pub ?</h3>
+      <p className="text-slate-500 dark:text-slate-400 mb-8 max-w-md mx-auto">
         Cliquez ci-dessous pour créer une vidéo promotionnelle de 30 secondes personnalisée pour Dental3Design avec l'IA Veo.
       </p>
       <div className="flex flex-col gap-4">
         <button
           onClick={generateVideo}
-          className="bg-slate-900 hover:bg-slate-800 text-white px-10 py-5 rounded-2xl font-black text-lg transition-all shadow-xl active:scale-[0.98] flex items-center justify-center gap-3 mx-auto"
+          className="bg-slate-900 dark:bg-blue-600 hover:bg-slate-800 dark:hover:bg-blue-700 text-white px-10 py-5 rounded-2xl font-black text-lg transition-all shadow-xl active:scale-[0.98] flex items-center justify-center gap-3 mx-auto"
         >
           Lancer la génération Veo
         </button>
         <button
           onClick={() => setShowYoutube(true)}
-          className="text-slate-400 hover:text-red-600 text-sm font-bold transition-all flex items-center justify-center gap-2"
+          className="text-slate-400 dark:text-slate-500 hover:text-red-600 dark:hover:text-red-400 text-sm font-bold transition-all flex items-center justify-center gap-2"
         >
           <Youtube size={16} />
           Ou regarder la vidéo YouTube

@@ -41,6 +41,9 @@ export const translations = {
     lowerJaw: 'Mâchoire Inférieure',
     successMessage: 'Dossier soumis avec succès !',
     premiumPlan: 'Plan Premium',
+    pendingCaseEditNotice: 'Ce cas est en attente car il manque des fichiers ou des instructions nécessaires à la conception du cas.',
+    updateCase: 'Mettre à jour le dossier',
+    backToDashboard: 'Retour au tableau de bord',
   },
   en: {
     dashboard: 'Dashboard',
@@ -82,6 +85,9 @@ export const translations = {
     lowerJaw: 'Lower Jaw',
     successMessage: 'Case submitted successfully!',
     premiumPlan: 'Premium Plan',
+    pendingCaseEditNotice: 'This case is pending because files or instructions necessary for the design are missing.',
+    updateCase: 'Update Case',
+    backToDashboard: 'Back to Dashboard',
   },
   es: {
     dashboard: 'Panel de control',
@@ -123,5 +129,8 @@ export const translations = {
     lowerJaw: 'Mandíbula Inferior',
     successMessage: '¡Caso enviado con éxito!',
     premiumPlan: 'Plan Premium',
+    pendingCaseEditNotice: 'Este caso está pendiente porque faltan archivos o instrucciones necesarias para el diseño.',
+    updateCase: 'Actualizar caso',
+    backToDashboard: 'Volver al panel de control',
   }
 };
