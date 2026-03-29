@@ -1,13 +1,12 @@
 import { supabase, Lab } from './supabase';
 
-// ── Inscription client (crée un compte Supabase Auth + une entrée dans labs) ──
+// ── Inscription ────────────────────────────────────────────
 export async function signupLab(data: {
   email: string;
   password: string;
   name: string;
   phone?: string;
 }): Promise<Lab> {
-  // 1. Créer le compte Auth
   const { data: authData, error: authError } = await supabase.auth.signUp({
     email: data.email,
     password: data.password,
@@ -15,7 +14,6 @@ export async function signupLab(data: {
   if (authError) throw authError;
   if (!authData.user) throw new Error('Erreur lors de la création du compte.');
 
-  // 2. Créer l'entrée dans la table labs
   const { data: lab, error: labError } = await supabase
     .from('labs')
     .insert({
@@ -33,7 +31,7 @@ export async function signupLab(data: {
   return lab;
 }
 
-// ── Connexion client ───────────────────────────────────────
+// ── Connexion ──────────────────────────────────────────────
 export async function loginLab(
   email: string,
   password: string
@@ -41,7 +39,6 @@ export async function loginLab(
   const { error } = await supabase.auth.signInWithPassword({ email, password });
   if (error) throw error;
 
-  // Récupérer les données du lab depuis la table
   const { data: lab, error: labError } = await supabase
     .from('labs')
     .select('*')
@@ -51,7 +48,7 @@ export async function loginLab(
   if (labError || !lab) throw new Error('Compte introuvable.');
   if (lab.status === 'deactivated') {
     await supabase.auth.signOut();
-    throw new Error('Ce compte a été désactivé. Contactez l\'administrateur.');
+    throw new Error("Ce compte a été désactivé. Contactez l'administrateur.");
   }
 
   return { lab };
@@ -62,18 +59,42 @@ export async function logoutLab(): Promise<void> {
   await supabase.auth.signOut();
 }
 
-// ── Session courante ───────────────────────────────────────
-export async function getLabSession(): Promise<Lab | null> {
-  const { data: { session } } = await supabase.auth.getSession();
-  if (!session) return null;
+// ── Init session au chargement de la page ─────────────────
+// Utilise onAuthStateChange qui est plus fiable que getSession()
+// car il attend que Supabase restaure la session depuis localStorage
+export function initLabSession(
+  callback: (lab: Lab | null) => void
+): () => void {
+  let resolved = false;
 
-  const { data: lab } = await supabase
-    .from('labs')
-    .select('*')
-    .eq('email', session.user.email)
-    .single();
+  // Timeout 3s si Supabase ne répond pas
+  const timeout = setTimeout(() => {
+    if (!resolved) { resolved = true; callback(null); }
+  }, 3000);
 
-  return lab ?? null;
+  const { data: { subscription } } = supabase.auth.onAuthStateChange(
+    async (event, session) => {
+      if (resolved) return;
+      clearTimeout(timeout);
+
+      if (!session) {
+        resolved = true;
+        callback(null);
+        return;
+      }
+
+      const { data: lab } = await supabase
+        .from('labs')
+        .select('*')
+        .eq('email', session.user.email)
+        .single();
+
+      resolved = true;
+      callback(lab ?? null);
+    }
+  );
+
+  return () => { clearTimeout(timeout); subscription.unsubscribe(); };
 }
 
 // ── Écouter les changements de session ────────────────────
@@ -82,10 +103,7 @@ export function onLabAuthChange(
 ): () => void {
   const { data: { subscription } } = supabase.auth.onAuthStateChange(
     async (_event, session) => {
-      if (!session) {
-        callback(null);
-        return;
-      }
+      if (!session) { callback(null); return; }
       const { data: lab } = await supabase
         .from('labs')
         .select('*')
