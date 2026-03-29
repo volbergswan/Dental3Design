@@ -575,6 +575,77 @@ export default function App() {
         </div>
       )}
 
+      {/* Buy Units Modal */}
+      {showBuyUnitsModal && (
+        <>
+          <div className="fixed inset-0 bg-slate-900/40 backdrop-blur-sm z-[100] animate-in fade-in duration-300" onClick={() => setShowBuyUnitsModal(false)} />
+          <div className="fixed inset-0 flex items-center justify-center z-[110] p-4 pointer-events-none">
+            <div className="w-full max-w-2xl bg-white dark:bg-slate-900 rounded-3xl shadow-2xl overflow-hidden pointer-events-auto border border-slate-100 dark:border-slate-800">
+              <div className="p-8 border-b border-gray-100 dark:border-slate-800 flex items-center justify-between">
+                <div>
+                  <h3 className="text-2xl font-black text-slate-900 dark:text-slate-100 tracking-tight">{t('buyUnitsTitle')}</h3>
+                  <p className="text-sm text-slate-500 dark:text-slate-400 font-medium mt-1">Choisissez l'offre qui vous convient le mieux</p>
+                </div>
+                <button onClick={() => setShowBuyUnitsModal(false)} className="p-2 text-gray-400 hover:text-gray-600 dark:hover:text-slate-300 hover:bg-gray-100 dark:hover:bg-slate-800 rounded-xl transition-colors">
+                  <X size={24} />
+                </button>
+              </div>
+              <div className="p-8 grid grid-cols-1 sm:grid-cols-2 gap-4 max-h-[70vh] overflow-y-auto">
+                {[
+                  { id: 'single', units: 1, price: 9.90, label: '1 UNIT', unitPrice: 9.90 },
+                  { id: 'start', units: 10, price: 89.90, label: 'PACK START', unitPrice: 8.99, popular: true },
+                  { id: 'lab', units: 50, price: 395, label: 'PACK LAB', unitPrice: 7.90 },
+                  { id: 'pro', units: 100, price: 690, label: 'PACK PRO', unitPrice: 6.90 },
+                ].map((offer) => (
+                  <div
+                    key={offer.id}
+                    className={`relative p-6 rounded-3xl border-2 transition-all cursor-pointer group flex flex-col justify-between ${
+                      offer.popular
+                        ? 'border-blue-600 bg-blue-50/30 dark:bg-blue-900/20'
+                        : 'border-gray-100 dark:border-slate-800 hover:border-blue-200 dark:hover:border-blue-800 hover:bg-slate-50 dark:hover:bg-slate-800/50'
+                    }`}
+                    onClick={() => {
+                      setCart(prev => {
+                        const existing = prev.find(item => item.id === offer.id);
+                        if (existing) return prev.map(item => item.id === offer.id ? { ...item, quantity: item.quantity + 1 } : item);
+                        return [...prev, { id: offer.id, label: offer.label, units: offer.units, price: offer.price, quantity: 1 }];
+                      });
+                      setShowBuyUnitsModal(false);
+                    }}
+                  >
+                    {offer.popular && (
+                      <span className="absolute -top-3 left-6 bg-blue-600 text-white text-[10px] font-black px-3 py-1 rounded-full uppercase tracking-widest">
+                        Populaire
+                      </span>
+                    )}
+                    <div>
+                      <h4 className="text-lg font-black text-slate-900 dark:text-slate-100 mb-1">{offer.label}</h4>
+                      <div className="flex items-baseline gap-1 mb-4">
+                        <span className="text-3xl font-black text-slate-900 dark:text-slate-100">{offer.units}</span>
+                        <span className="text-sm font-bold text-slate-400 dark:text-slate-500 uppercase tracking-widest">Units</span>
+                      </div>
+                    </div>
+                    <div className="space-y-3">
+                      <div className="flex flex-col">
+                        <span className="text-xl font-black text-blue-600 dark:text-blue-400">{offer.price.toFixed(2)}€</span>
+                        <span className="text-[11px] font-bold text-slate-400 dark:text-slate-500 uppercase tracking-tight">
+                          {t('unitPrice', { price: offer.unitPrice.toFixed(2) })}
+                        </span>
+                      </div>
+                      <button className={`w-full py-3 rounded-2xl font-bold text-sm transition-all active:scale-95 ${
+                        offer.popular ? 'bg-blue-600 text-white shadow-lg shadow-blue-500/20' : 'bg-slate-900 dark:bg-slate-700 text-white'
+                      }`}>
+                        {t('buyNow')}
+                      </button>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </div>
+        </>
+      )}
+
       {/* Insufficient units modal */}
       {showInsufficientUnitsModal && (
         <>
