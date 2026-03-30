@@ -57,20 +57,25 @@ export async function loginLab(
   const { error } = await supabase.auth.signInWithPassword({ email, password });
   if (error) throw error;
 
-  // 2. Récupérer lab
+  // 2. Vérifier que c'est bien un compte lab (pas un admin)
   const { data: lab, error: labError } = await supabase
     .from('labs')
     .select('*')
     .eq('email', email)
     .single();
 
-  if (labError || !lab) throw new Error('Compte introuvable.');
+  if (labError || !lab) {
+    // Pas dans la table labs = compte admin → refuser l'accès
+    await supabase.auth.signOut();
+    throw new Error('Accès refusé. Ce compte est réservé à l'administration.');
+  }
+
   if (lab.status === 'deactivated') {
     await supabase.auth.signOut();
     throw new Error("Ce compte a été désactivé. Contactez l'administrateur.");
   }
 
-  // 3. Sauvegarder en cache local pour les prochains chargements
+  // 3. Sauvegarder en cache local
   saveLabToCache(lab);
   return { lab };
 }
