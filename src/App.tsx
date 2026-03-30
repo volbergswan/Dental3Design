@@ -15,7 +15,7 @@ import {
 import { motion, AnimatePresence } from 'motion/react';
 import { useLanguage } from './contexts/LanguageContext';
 import { PROSTHESIS_BASE_DATA } from './constants';
-import { loginLab, signupLab, logoutLab, initLabSession, onLabAuthChange } from './lib/authService';
+import { loginLab, signupLab, logoutLab, getLabSession, onLabAuthChange } from './lib/authService';
 import { getCasesByLab, createCase, subscribeToCases } from './lib/caseService';
 import { getMessages, sendMessageToAdmin, subscribeToMessages } from './lib/messageService';
 import { askMrDent, MR_DENT_GREETING } from './lib/mrDentService';
@@ -139,13 +139,24 @@ export default function App() {
 
   // ── Check session on mount ────────────────────────────────
   useEffect(() => {
-    const unsub = initLabSession((lab) => {
+    // Vérifier la session existante
+    getLabSession().then((lab) => {
       if (lab) {
         setCurrentLab(lab);
         setIsAuthenticated(true);
         setCurrentPage('dashboard');
       }
       setAuthChecking(false);
+    });
+
+    // Écouter les changements (login/logout)
+    const unsub = onLabAuthChange((lab) => {
+      setCurrentLab(lab);
+      setIsAuthenticated(!!lab);
+      if (!lab) {
+        setCurrentPage('landing');
+        setAuthChecking(false);
+      }
     });
     return unsub;
   }, []);
