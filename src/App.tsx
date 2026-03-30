@@ -15,7 +15,7 @@ import {
 import { motion, AnimatePresence } from 'motion/react';
 import { useLanguage } from './contexts/LanguageContext';
 import { PROSTHESIS_BASE_DATA } from './constants';
-import { loginLab, signupLab, logoutLab, getLabSession, onLabAuthChange } from './lib/authService';
+import { loginLab, signupLab, logoutLab, getLabSession, onLabAuthChange, refreshLabData } from './lib/authService';
 import { getCasesByLab, createCase, subscribeToCases } from './lib/caseService';
 import { getMessages, sendMessageToAdmin, subscribeToMessages } from './lib/messageService';
 import { askMrDent, MR_DENT_GREETING } from './lib/mrDentService';
@@ -262,24 +262,38 @@ export default function App() {
 
     const toothStr = selectedTeeth.sort((a, b) => a - b).join(', ');
     const typeStr = [...new Set(
-      selectedTeeth.flatMap(t => (toothSelections[t] ?? []).map(id => {
+      selectedTeeth.flatMap(tooth => (toothSelections[tooth] ?? []).map(id => {
         const base = PROSTHESIS_BASE_DATA.find(p => p.id === id);
         return base ? t(id as any) : id;
       }))
     )].join(', ');
 
     try {
-      await createCase({
+      // Créer le cas sans les fichiers (rapide)
+      const newCase = await createCase({
         lab_id: currentLab.id,
         patient: patientName,
         type: typeStr,
         tooth: toothStr,
         units: totalCost,
         instructions,
-        files,
       });
+
       setSubmitting(false);
       setShowSuccessModal(true);
+
+      // Upload fichiers en arrière-plan (sans bloquer l UI)
+      if (files.length > 0) {
+        import('./lib/caseService').then(({ attachFilesToCase }) => {
+          attachFilesToCase(newCase.id, files).catch(console.error);
+        });
+      }
+
+      // Rafraîchir le solde en arrière-plan
+      refreshLabData(currentLab.id).then(updated => {
+        if (updated) setCurrentLab(updated);
+      });
+
     } catch (e) {
       console.error(e);
       setSubmitting(false);
