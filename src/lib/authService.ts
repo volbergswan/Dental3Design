@@ -1,5 +1,21 @@
 import { supabase, Lab } from './supabase';
 
+const LAB_CACHE_KEY = 'd3d_lab_session';
+
+// ── Cache local ────────────────────────────────────────────
+function saveLabToCache(lab: Lab) {
+  try { localStorage.setItem(LAB_CACHE_KEY, JSON.stringify(lab)); } catch {}
+}
+function getLabFromCache(): Lab | null {
+  try {
+    const raw = localStorage.getItem(LAB_CACHE_KEY);
+    return raw ? JSON.parse(raw) : null;
+  } catch { return null; }
+}
+function clearLabCache() {
+  try { localStorage.removeItem(LAB_CACHE_KEY); } catch {}
+}
+
 // ── Inscription ────────────────────────────────────────────
 export async function signupLab(data: {
   email: string;
@@ -28,6 +44,7 @@ export async function signupLab(data: {
     .single();
 
   if (labError) throw labError;
+  saveLabToCache(lab);
   return lab;
 }
 
@@ -36,9 +53,11 @@ export async function loginLab(
   email: string,
   password: string
 ): Promise<{ lab: Lab }> {
+  // 1. Auth Supabase
   const { error } = await supabase.auth.signInWithPassword({ email, password });
   if (error) throw error;
 
+  // 2. Récupérer lab
   const { data: lab, error: labError } = await supabase
     .from('labs')
     .select('*')
@@ -51,17 +70,31 @@ export async function loginLab(
     throw new Error("Ce compte a été désactivé. Contactez l'administrateur.");
   }
 
+  // 3. Sauvegarder en cache local pour les prochains chargements
+  saveLabToCache(lab);
   return { lab };
 }
 
 // ── Déconnexion ────────────────────────────────────────────
 export async function logoutLab(): Promise<void> {
+  clearLabCache();
   await supabase.auth.signOut();
 }
 
 // ── Session au chargement ──────────────────────────────────
-// Approche simple : getSession() puis setAuthChecking(false) directement
+// Retourne immédiatement depuis le cache, puis vérifie en arrière-plan
 export async function getLabSession(): Promise<Lab | null> {
+  // D'abord vérifier le cache local (instantané)
+  const cached = getLabFromCache();
+  if (cached) {
+    // Vérifier en arrière-plan que la session Supabase est toujours valide
+    supabase.auth.getSession().then(({ data: { session } }) => {
+      if (!session) clearLabCache();
+    });
+    return cached;
+  }
+
+  // Pas de cache → vérifier Supabase
   try {
     const { data: { session } } = await supabase.auth.getSession();
     if (!session?.user?.email) return null;
@@ -72,10 +105,22 @@ export async function getLabSession(): Promise<Lab | null> {
       .eq('email', session.user.email)
       .single();
 
+    if (lab) saveLabToCache(lab);
     return lab ?? null;
   } catch {
     return null;
   }
+}
+
+// ── Rafraîchir les données du lab depuis Supabase ─────────
+export async function refreshLabData(labId: string): Promise<Lab | null> {
+  const { data: lab } = await supabase
+    .from('labs')
+    .select('*')
+    .eq('id', labId)
+    .single();
+  if (lab) saveLabToCache(lab);
+  return lab ?? null;
 }
 
 // ── Écouter les changements de session ────────────────────
@@ -83,14 +128,25 @@ export function onLabAuthChange(
   callback: (lab: Lab | null) => void
 ): () => void {
   const { data: { subscription } } = supabase.auth.onAuthStateChange(
-    async (_event, session) => {
-      if (!session?.user?.email) { callback(null); return; }
+    async (event, session) => {
+      if (event === 'SIGNED_OUT') {
+        clearLabCache();
+        callback(null);
+        return;
+      }
+      if (!session?.user?.email) return;
+
+      // Pour TOKEN_REFRESHED on ne refait pas l'appel labs
+      if (event === 'TOKEN_REFRESHED') return;
+
       const { data: lab } = await supabase
         .from('labs')
         .select('*')
         .eq('email', session.user.email)
         .single();
-      callback(lab ?? null);
+
+      if (lab) { saveLabToCache(lab); callback(lab); }
+      else callback(null);
     }
   );
   return () => subscription.unsubscribe();
