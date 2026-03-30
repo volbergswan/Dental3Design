@@ -59,42 +59,23 @@ export async function logoutLab(): Promise<void> {
   await supabase.auth.signOut();
 }
 
-// ── Init session au chargement de la page ─────────────────
-// Utilise onAuthStateChange qui est plus fiable que getSession()
-// car il attend que Supabase restaure la session depuis localStorage
-export function initLabSession(
-  callback: (lab: Lab | null) => void
-): () => void {
-  let resolved = false;
+// ── Session au chargement ──────────────────────────────────
+// Approche simple : getSession() puis setAuthChecking(false) directement
+export async function getLabSession(): Promise<Lab | null> {
+  try {
+    const { data: { session } } = await supabase.auth.getSession();
+    if (!session?.user?.email) return null;
 
-  // Timeout 3s si Supabase ne répond pas
-  const timeout = setTimeout(() => {
-    if (!resolved) { resolved = true; callback(null); }
-  }, 3000);
+    const { data: lab } = await supabase
+      .from('labs')
+      .select('*')
+      .eq('email', session.user.email)
+      .single();
 
-  const { data: { subscription } } = supabase.auth.onAuthStateChange(
-    async (event, session) => {
-      if (resolved) return;
-      clearTimeout(timeout);
-
-      if (!session) {
-        resolved = true;
-        callback(null);
-        return;
-      }
-
-      const { data: lab } = await supabase
-        .from('labs')
-        .select('*')
-        .eq('email', session.user.email)
-        .single();
-
-      resolved = true;
-      callback(lab ?? null);
-    }
-  );
-
-  return () => { clearTimeout(timeout); subscription.unsubscribe(); };
+    return lab ?? null;
+  } catch {
+    return null;
+  }
 }
 
 // ── Écouter les changements de session ────────────────────
@@ -103,7 +84,7 @@ export function onLabAuthChange(
 ): () => void {
   const { data: { subscription } } = supabase.auth.onAuthStateChange(
     async (_event, session) => {
-      if (!session) { callback(null); return; }
+      if (!session?.user?.email) { callback(null); return; }
       const { data: lab } = await supabase
         .from('labs')
         .select('*')
