@@ -44,6 +44,7 @@ export const translations = {
     pendingCaseEditNotice: 'Ce cas est en attente car il manque des fichiers ou des instructions nécessaires à la conception du cas.',
     updateCase: 'Mettre à jour le dossier',
     backToDashboard: 'Retour au tableau de bord',
+    messaging: 'Messagerie modérateur',
   },
   en: {
     dashboard: 'Dashboard',
@@ -88,6 +89,7 @@ export const translations = {
     pendingCaseEditNotice: 'This case is pending because files or instructions necessary for the design are missing.',
     updateCase: 'Update Case',
     backToDashboard: 'Back to Dashboard',
+    messaging: 'Moderator Messaging',
   },
   es: {
     dashboard: 'Panel de control',
@@ -132,5 +134,6 @@ export const translations = {
     pendingCaseEditNotice: 'Este caso está pendiente porque faltan archivos o instrucciones necesarias para el diseño.',
     updateCase: 'Actualizar caso',
     backToDashboard: 'Volver al panel de control',
+    messaging: 'Mensajería moderador',
   }
 };

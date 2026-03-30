@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
-import { User, Globe, ChevronDown, X, Send, ShoppingCart, Trash2, Plus, Minus, Moon, Sun } from 'lucide-react';
+import { User, Globe, ChevronDown, X, Send, ShoppingCart, Trash2, Plus, Minus, Moon, Sun, MessagesSquare, Menu, LayoutGrid } from 'lucide-react';
 import { useLanguage, Language } from '../contexts/LanguageContext';
+import { motion, AnimatePresence } from 'motion/react';
 
 interface NavbarProps {
   onNavigate: (page: 'landing' | 'auth' | 'dashboard' | 'create-case' | 'manage-account') => void;
@@ -12,6 +13,7 @@ interface NavbarProps {
   cart: {id: string, label: string, units: number, price: number, quantity: number}[];
   setCart: React.Dispatch<React.SetStateAction<{id: string, label: string, units: number, price: number, quantity: number}[]>>;
   onCheckout: (units: number) => void;
+  onOpenChat: (type?: 'bot' | 'admin') => void;
   isAuthenticated: boolean;
   onLogout: () => void;
   darkMode: boolean;
@@ -37,6 +39,7 @@ export const Navbar: React.FC<NavbarProps> = ({
   cart,
   setCart,
   onCheckout,
+  onOpenChat,
   isAuthenticated,
   onLogout,
   userData,
@@ -51,6 +54,7 @@ export const Navbar: React.FC<NavbarProps> = ({
   const [userEmail, setUserEmail] = useState('');
   const [isSending, setIsSending] = useState(false);
   const [showSuccess, setShowSuccess] = useState(false);
+  const [showMobileMenu, setShowMobileMenu] = useState(false);
 
   const handleSendHelp = () => {
     if (!helpMessage.trim() || !helpSubject.trim() || (!isAuthenticated && !userEmail.trim())) return;
@@ -117,6 +121,16 @@ export const Navbar: React.FC<NavbarProps> = ({
               }`}
             >
               {t('createNewCase')}
+            </button>
+          </div>
+        )}
+        {isAuthenticated && (
+          <div className="md:hidden">
+            <button 
+              onClick={() => setShowMobileMenu(!showMobileMenu)}
+              className="p-2 text-gray-500 dark:text-slate-400 hover:bg-gray-100 dark:hover:bg-slate-800 rounded-lg transition-colors"
+            >
+              {showMobileMenu ? <X size={24} /> : <Menu size={24} />}
             </button>
           </div>
         )}
@@ -440,6 +454,65 @@ export const Navbar: React.FC<NavbarProps> = ({
           </button>
         )}
       </div>
+
+      {/* Mobile Menu Overlay */}
+      <AnimatePresence>
+        {showMobileMenu && (
+          <>
+            <motion.div 
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              onClick={() => setShowMobileMenu(false)}
+              className="fixed inset-0 bg-slate-900/40 backdrop-blur-sm z-[55] md:hidden"
+            />
+            <motion.div 
+              initial={{ x: '100%' }}
+              animate={{ x: 0 }}
+              exit={{ x: '100%' }}
+              transition={{ type: 'spring', damping: 25, stiffness: 200 }}
+              className="fixed top-0 right-0 bottom-0 w-72 bg-white dark:bg-slate-900 z-[60] shadow-2xl md:hidden flex flex-col"
+            >
+              <div className="p-6 border-b border-gray-100 dark:border-slate-800 flex items-center justify-between">
+                <h3 className="font-black text-slate-900 dark:text-slate-100 tracking-tight">Menu</h3>
+                <button onClick={() => setShowMobileMenu(false)} className="p-2 text-gray-400 dark:text-slate-500 hover:bg-gray-100 dark:hover:bg-slate-800 rounded-xl transition-colors">
+                  <X size={20} />
+                </button>
+              </div>
+              <div className="p-4 space-y-2">
+                <button 
+                  onClick={() => {
+                    onNavigate('dashboard');
+                    setShowMobileMenu(false);
+                  }}
+                  className={`w-full flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-bold transition-all ${
+                    currentPage === 'dashboard' 
+                      ? 'bg-blue-50 dark:bg-blue-900/30 text-blue-600 dark:text-blue-400' 
+                      : 'text-gray-500 dark:text-slate-400 hover:bg-gray-50 dark:hover:bg-slate-800'
+                  }`}
+                >
+                  <LayoutGrid size={18} />
+                  {t('dashboard')}
+                </button>
+                <button 
+                  onClick={() => {
+                    onNavigate('create-case');
+                    setShowMobileMenu(false);
+                  }}
+                  className={`w-full flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-bold transition-all ${
+                    currentPage === 'create-case' 
+                      ? 'bg-blue-50 dark:bg-blue-900/30 text-blue-600 dark:text-blue-400' 
+                      : 'text-gray-500 dark:text-slate-400 hover:bg-gray-50 dark:hover:bg-slate-800'
+                  }`}
+                >
+                  <Plus size={18} />
+                  {t('createNewCase')}
+                </button>
+              </div>
+            </motion.div>
+          </>
+        )}
+      </AnimatePresence>
     </nav>
   );
 };

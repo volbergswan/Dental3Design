@@ -13,7 +13,7 @@ import {
   Activity,
   ArrowUpDown,
   X,
-  MessageSquare,
+  MessagesSquare,
   Send,
   Minus
 } from 'lucide-react';
@@ -23,7 +23,7 @@ interface DashboardProps {
   onCreateCase: () => void;
   onCaseClick: (caseData: any) => void;
   onBuyUnits: () => void;
-  onOpenChat: () => void;
+  onOpenChat: (type?: 'bot' | 'admin') => void;
   availableUnits: number;
   cases: any[];
 }
@@ -181,13 +181,13 @@ export const Dashboard: React.FC<DashboardProps> = ({ onCreateCase, onCaseClick,
               <span className="text-xs font-bold text-slate-600 dark:text-slate-400 uppercase tracking-widest">{t('pricingLabel')}</span>
             </button>
 
-            {/* Assistant Mr.dent */}
+            {/* Messaging */}
             <button 
-              onClick={onOpenChat}
+              onClick={() => onOpenChat('admin')}
               className="bg-white dark:bg-slate-900 border border-gray-100 dark:border-slate-800 p-4 rounded-3xl shadow-sm hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-all flex flex-col items-center justify-center gap-2 group relative"
             >
-              <MessageSquare size={24} className="text-slate-400 dark:text-slate-500 group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors" />
-              <span className="text-xs font-bold text-slate-600 dark:text-slate-400 uppercase tracking-widest">Assistant Mr.dent</span>
+              <MessagesSquare size={24} className="text-slate-400 dark:text-slate-500 group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors" />
+              <span className="text-xs font-bold text-slate-600 dark:text-slate-400 uppercase tracking-tight text-center leading-tight px-1">{t('adminMessaging')}</span>
               <span className="absolute top-3 right-8 w-2 h-2 bg-red-500 rounded-full animate-pulse"></span>
             </button>
           </div>

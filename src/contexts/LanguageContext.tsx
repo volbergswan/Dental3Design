@@ -58,6 +58,11 @@ interface Translations {
   messageSent: string;
   chatInitialMessage: string;
   chatBotResponse: string;
+  adminMessaging: string;
+  adminOnline: string;
+  adminInitialMessage: string;
+  adminResponse: string;
+  messaging: string;
   subjectLabel: string;
   subjectPlaceholder: string;
   insufficientUnitsTitle: string;
@@ -211,6 +216,11 @@ const translations: Record<Language, Translations> = {
     messageSent: "Votre message a bien été envoyé et sera traité dans les plus brefs délais.",
     chatInitialMessage: "Bonjour, je suis votre assistant Mr.Dent, comment puis-je vous aider ?",
     chatBotResponse: "Merci pour votre message. Un conseiller Mr.Dent va vous répondre dans quelques instants.",
+    adminMessaging: "Messagerie modérateur",
+    adminOnline: "Modérateur en ligne",
+    adminInitialMessage: "Bonjour comment puis-je vous aidez",
+    adminResponse: "Merci pour votre message. Je traite votre demande et je reviens vers vous rapidement.",
+    messaging: "Messagerie modérateur",
     subjectLabel: "Objet de la demande",
     subjectPlaceholder: "",
     insufficientUnitsTitle: "Units insuffisantes",
@@ -362,6 +372,11 @@ const translations: Record<Language, Translations> = {
     messageSent: "Your message has been sent and will be processed as soon as possible.",
     chatInitialMessage: "Hello, I am your assistant Mr.Dent, how can I help you?",
     chatBotResponse: "Thank you for your message. A Mr.Dent advisor will get back to you in a few moments.",
+    adminMessaging: "Moderator Messaging",
+    adminOnline: "Moderator Online",
+    adminInitialMessage: "Hello, I am the Mr.Dent moderator. How can I help you?",
+    adminResponse: "Thank you for your message. I am processing your request and will get back to you shortly.",
+    messaging: "Moderator Messaging",
     subjectLabel: "Subject",
     subjectPlaceholder: "",
     insufficientUnitsTitle: "Insufficient Units",
@@ -513,6 +528,11 @@ const translations: Record<Language, Translations> = {
     messageSent: "Su mensaje ha sido enviado y será procesado lo antes posible.",
     chatInitialMessage: "Hola, soy su asistente Mr.Dent, ¿cómo puedo ayudarle?",
     chatBotResponse: "Gracias por su mensaje. Un asesor de Mr.Dent le responderá en unos instantes.",
+    adminMessaging: "Mensajería del Moderador",
+    adminOnline: "Moderador en línea",
+    adminInitialMessage: "Hola, soy el moderador de Mr.Dent. ¿Cómo puedo ayudarle?",
+    adminResponse: "Gracias por su mensaje. Estoy procesando su solicitud y me pondré en contacto con usted en breve.",
+    messaging: "Mensajería moderador",
     subjectLabel: "Asunto",
     subjectPlaceholder: "",
     insufficientUnitsTitle: "Units insuficientes",
