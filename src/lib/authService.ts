@@ -67,7 +67,7 @@ export async function loginLab(
   if (labError || !lab) {
     // Pas dans la table labs = compte admin → refuser l'accès
     await supabase.auth.signOut();
-    throw new Error('Accès refusé. Ce compte est réservé à l'administration.');
+    throw new Error("Accès refusé. Ce compte est réservé à l'administration.");
   }
 
   if (lab.status === 'deactivated') {
