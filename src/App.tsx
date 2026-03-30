@@ -139,26 +139,36 @@ export default function App() {
 
   // ── Check session on mount ────────────────────────────────
   useEffect(() => {
-    // Vérifier la session existante
+    let done = false;
+
+    // Timeout de secours : après 2s on arrête le spinner quoi qu il arrive
+    const timeout = setTimeout(() => {
+      if (!done) { done = true; setAuthChecking(false); }
+    }, 2000);
+
     getLabSession().then((lab) => {
-      if (lab) {
-        setCurrentLab(lab);
-        setIsAuthenticated(true);
-        setCurrentPage('dashboard');
+      clearTimeout(timeout);
+      if (!done) {
+        done = true;
+        if (lab) {
+          setCurrentLab(lab);
+          setIsAuthenticated(true);
+          setCurrentPage('dashboard');
+        }
+        setAuthChecking(false);
       }
-      setAuthChecking(false);
+    }).catch(() => {
+      clearTimeout(timeout);
+      if (!done) { done = true; setAuthChecking(false); }
     });
 
-    // Écouter les changements (login/logout)
     const unsub = onLabAuthChange((lab) => {
       setCurrentLab(lab);
       setIsAuthenticated(!!lab);
-      if (!lab) {
-        setCurrentPage('landing');
-        setAuthChecking(false);
-      }
+      if (!lab) setCurrentPage('landing');
     });
-    return unsub;
+
+    return () => { clearTimeout(timeout); unsub(); };
   }, []);
 
   // ── Load cases when authenticated ─────────────────────────
