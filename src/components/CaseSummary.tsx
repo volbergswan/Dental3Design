@@ -28,10 +28,27 @@ export const CaseSummary: React.FC<CaseSummaryProps> = ({ selectedTeeth, toothSe
 
   const totalCost = toothEntries.reduce((acc, entry) => {
     const hasOtherProsthesis = entry.prostheses.some(p => p.id !== 'modeles');
+    const isMaxilla = entry.number >= 11 && entry.number <= 28;
+    const isMandible = entry.number >= 31 && entry.number <= 48;
+
     return acc + entry.prostheses.reduce((pAcc, p) => {
       let cost = p.cost;
       if (p.id === 'modeles' && hasOtherProsthesis) {
         cost = 0;
+      } else if (p.id === 'surgical' || p.id === 'implant_planning') {
+        const previousTeethWithSameProsthesis = toothEntries
+          .filter(e => e.number < entry.number)
+          .filter(e => e.prostheses.some(pr => pr.id === p.id));
+        
+        const alreadyAccountedOnArch = previousTeethWithSameProsthesis.some(e => {
+          const prevIsMaxilla = e.number >= 11 && e.number <= 28;
+          const prevIsMandible = e.number >= 31 && e.number <= 48;
+          return (isMaxilla && prevIsMaxilla) || (isMandible && prevIsMandible);
+        });
+        
+        if (alreadyAccountedOnArch) {
+          cost = 0;
+        }
       }
       return pAcc + cost;
     }, 0);
@@ -76,8 +93,25 @@ export const CaseSummary: React.FC<CaseSummaryProps> = ({ selectedTeeth, toothSe
                     {entry.prostheses.length > 0 ? (
                       entry.prostheses.map((p) => {
                         let displayCost = p.cost;
+                        const isMaxilla = entry.number >= 11 && entry.number <= 28;
+                        const isMandible = entry.number >= 31 && entry.number <= 48;
+
                         if (p.id === 'modeles' && hasOtherProsthesis) {
                           displayCost = 0;
+                        } else if (p.id === 'surgical' || p.id === 'implant_planning') {
+                          const previousTeethWithSameProsthesis = toothEntries
+                            .filter(e => e.number < entry.number)
+                            .filter(e => e.prostheses.some(pr => pr.id === p.id));
+                          
+                          const alreadyAccountedOnArch = previousTeethWithSameProsthesis.some(e => {
+                            const prevIsMaxilla = e.number >= 11 && e.number <= 28;
+                            const prevIsMandible = e.number >= 31 && e.number <= 48;
+                            return (isMaxilla && prevIsMaxilla) || (isMandible && prevIsMandible);
+                          });
+                          
+                          if (alreadyAccountedOnArch) {
+                            displayCost = 0;
+                          }
                         }
                         return (
                           <div key={p.id} className="flex justify-between items-center text-sm">

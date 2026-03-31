@@ -216,11 +216,14 @@ export default function App() {
   // Derived: teeth that have at least one prosthesis
   const selectedTeeth = Object.keys(toothSelections)
     .map(Number)
-    .filter(num => (toothSelections[num] || []).length > 0);
+    .filter(num => (toothSelections[num] || []).length > 0)
+    .sort((a, b) => a - b);
 
   const totalCost = selectedTeeth.reduce((acc, num) => {
     const selections = toothSelections[num] || [];
     const hasOtherProsthesis = selections.some(id => id !== 'modeles');
+    const isMaxilla = num >= 11 && num <= 28;
+    const isMandible = num >= 31 && num <= 48;
     
     const toothCost = selections.reduce((pAcc, id) => {
       const base = PROSTHESIS_BASE_DATA.find(p => p.id === id);
@@ -229,6 +232,23 @@ export default function App() {
       // 'modeles' costs 0 if another prosthesis is selected on the same tooth
       if (id === 'modeles' && hasOtherProsthesis) {
         cost = 0;
+      }
+      
+      // 'surgical' or 'implant_planning' costs per arch (maxilla/mandible)
+      if (id === 'surgical' || id === 'implant_planning') {
+        const previousTeethWithSameProsthesis = selectedTeeth
+          .filter(t => t < num)
+          .filter(t => (toothSelections[t] || []).includes(id));
+        
+        const alreadyAccountedOnArch = previousTeethWithSameProsthesis.some(t => {
+          const prevIsMaxilla = t >= 11 && t <= 28;
+          const prevIsMandible = t >= 31 && t <= 48;
+          return (isMaxilla && prevIsMaxilla) || (isMandible && prevIsMandible);
+        });
+        
+        if (alreadyAccountedOnArch) {
+          cost = 0;
+        }
       }
       
       return pAcc + cost;
