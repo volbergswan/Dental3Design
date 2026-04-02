@@ -401,7 +401,7 @@ export const chatbotApi = {
       });
 
     // Appeler l'Edge Function Mr. Dent
-    const { data, error } = await supabase.functions.invoke('chat-mr-dent', {
+    const { data, error } = await supabase.functions.invoke('mr-dent', {
       body: { conversationId, message },
     });
 
