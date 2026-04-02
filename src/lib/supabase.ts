@@ -400,13 +400,31 @@ export const chatbotApi = {
         content: message,
       });
 
+    // Récupérer l'historique pour le contexte
+    const { data: history } = await supabase
+      .from('chatbot_messages')
+      .select('role, content')
+      .eq('conversation_id', conversationId)
+      .order('created_at', { ascending: true });
+
     // Appeler l'Edge Function Mr. Dent
     const { data, error } = await supabase.functions.invoke('mr-dent', {
-      body: { conversationId, message },
+      body: { messages: history || [{ role: 'user', content: message }] },
     });
 
     if (error) throw error;
-    return data;
+
+    // Sauvegarder la réponse de Mr. Dent
+    const assistantResponse = data?.response || 'Désolé, je n\'ai pas pu répondre.';
+    await supabase
+      .from('chatbot_messages')
+      .insert({
+        conversation_id: conversationId,
+        role: 'assistant',
+        content: assistantResponse,
+      });
+
+    return { reply: assistantResponse };
   },
 
   // Historique d'une conversation
