@@ -1,3 +1,4 @@
+import { useTheme } from '../contexts/ThemeContext';
 import React, { useState } from 'react';
 import { User, Globe, ChevronDown, X, Send, ShoppingCart, Trash2, Plus, Minus, Moon, Sun, MessagesSquare, Menu, LayoutGrid } from 'lucide-react';
 import { useLanguage, Language } from '../contexts/LanguageContext';
@@ -16,8 +17,6 @@ interface NavbarProps {
   onOpenChat: (type?: 'bot' | 'admin') => void;
   isAuthenticated: boolean;
   onLogout: () => void;
-  darkMode: boolean;
-  setDarkMode: (dark: boolean) => void;
   userData: {
     firstName: string;
     lastName: string;
@@ -43,12 +42,11 @@ export const Navbar: React.FC<NavbarProps> = ({
   isAuthenticated,
   onLogout,
   userData,
-  darkMode,
-  setDarkMode
 }) => {
   const { language, setLanguage, t } = useLanguage();
   const [showLangMenu, setShowLangMenu] = useState(false);
   const [showProfileMenu, setShowProfileMenu] = useState(false);
+  const { isDarkMode, toggleDarkMode } = useTheme();
   const [showCartMenu, setShowCartMenu] = useState(false);
   const [helpMessage, setHelpMessage] = useState('');
   const [userEmail, setUserEmail] = useState('');
@@ -138,11 +136,11 @@ export const Navbar: React.FC<NavbarProps> = ({
 
       <div className="flex items-center gap-3">
         <button
-          onClick={() => setDarkMode(!darkMode)}
+          onClick={toggleDarkMode}
           className="p-2 text-gray-500 dark:text-slate-400 hover:bg-gray-100 dark:hover:bg-slate-800 rounded-lg transition-colors"
-          title={darkMode ? "Mode clair" : "Mode sombre"}
+          title={isDarkMode ? "Mode clair" : "Mode sombre"}
         >
-          {darkMode ? <Sun size={18} /> : <Moon size={18} />}
+          {isDarkMode ? <Sun size={18} /> : <Moon size={18} />}
         </button>
 
         <div className="relative">
