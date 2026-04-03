@@ -57,7 +57,7 @@ export const Dashboard: React.FC<DashboardProps> = ({ onCreateCase, onCaseClick,
   const stats = [
     { 
       label: t('statWaiting'), 
-      value: cases.filter(c => c.status === 'statusWaiting').length.toString(), 
+      value: cases.filter(c => c.status === 'statusNone').length.toString(), 
       icon: <Minus className="text-slate-400 dark:text-slate-500" strokeWidth={4} />, 
       color: 'bg-slate-50 dark:bg-slate-800/50' 
     },
@@ -317,7 +317,7 @@ export const Dashboard: React.FC<DashboardProps> = ({ onCreateCase, onCaseClick,
                       <span className={`inline-flex items-center px-2.5 py-1 rounded-full text-xs font-bold uppercase tracking-wider ${
                         c.status === 'statusCompleted' ? 'bg-emerald-50 dark:bg-emerald-900/30 text-emerald-600 dark:text-emerald-400' :
                         c.status === 'statusInProgress' ? 'bg-blue-50 dark:bg-blue-900/30 text-blue-600 dark:text-blue-400' :
-                        c.status === 'statusWaiting' ? 'bg-slate-100 dark:bg-slate-800 text-slate-500 dark:text-slate-400' :
+                        c.status === 'statusNone' ? 'bg-slate-100 dark:bg-slate-800 text-slate-500 dark:text-slate-400' :
                         'bg-amber-50 dark:bg-amber-900/30 text-amber-600 dark:text-amber-400'
                       }`}>
                         {t(c.status as any)}
