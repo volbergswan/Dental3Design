@@ -155,8 +155,8 @@ interface Translations {
   dailyLimitAlert: string;
   dailyLimitReachedTitle: string;
   dailyLimitReachedMessage: string;
-  statWaiting: string;
-  statusWaiting: string;
+  statNone: string;
+  statusNone: string;
 }
 
 const translations: Record<Language, Translations> = {
@@ -246,7 +246,7 @@ const translations: Record<Language, Translations> = {
     statusInProgress: "En cours de traitement",
     statusCompleted: "Terminé",
     statusPending: "En attente d'un fichier",
-    statusWaiting: "En attente",
+    statusNone: "En attente",
     caseInProgressTitle: "Conception en cours",
     casePendingTitle: "En attente de traitement",
     caseInProgressMessage: "Nos designers travaillent actuellement sur votre cas. Vous recevrez une notification dès qu'il sera prêt.",
@@ -314,7 +314,7 @@ const translations: Record<Language, Translations> = {
     dailyLimitAlert: "Dans le cadre de l'optimisation de notre service, un maximum de 4 commandes par jour est appliqué",
     dailyLimitReachedTitle: "Limite quotidienne atteinte",
     dailyLimitReachedMessage: "Vous avez atteint la limite de 4 commandes par jour. Veuillez revenir demain pour soumettre de nouveaux cas.",
-    statWaiting: "En attente",
+    statNone: "En attente",
   },
   en: {
     dashboard: "Dashboard",
@@ -402,7 +402,7 @@ const translations: Record<Language, Translations> = {
     statusInProgress: "Processing",
     statusCompleted: "Completed",
     statusPending: "Pending Files",
-    statusWaiting: "Waiting",
+    statusNone: "Waiting",
     caseInProgressTitle: "Design in Progress",
     casePendingTitle: "Pending Processing",
     caseInProgressMessage: "Our designers are currently working on your case. You will receive a notification as soon as it is ready.",
@@ -470,7 +470,7 @@ const translations: Record<Language, Translations> = {
     dailyLimitAlert: "As part of our service optimization, a maximum of 4 orders per day is applied",
     dailyLimitReachedTitle: "Daily Limit Reached",
     dailyLimitReachedMessage: "You have reached the limit of 4 orders per day. Please come back tomorrow to submit new cases.",
-    statWaiting: "Waiting",
+    statNone: "Waiting",
   },
   es: {
     dashboard: "Tablero",
@@ -558,7 +558,7 @@ const translations: Record<Language, Translations> = {
     statusInProgress: "En proceso de tratamiento",
     statusCompleted: "Completado",
     statusPending: "Pendiente de un archivo",
-    statusWaiting: "En espera",
+    statusNone: "En espera",
     caseInProgressTitle: "Diseño en curso",
     casePendingTitle: "Pendiente de procesamiento",
     caseInProgressMessage: "Nuestros diseñadores están trabajando actualmente en su caso. Recibirá una notificación tan pronto como esté listo.",
@@ -626,7 +626,7 @@ const translations: Record<Language, Translations> = {
     dailyLimitAlert: "Como parte de la optimización de nuestro servicio, se aplica un máximo de 4 pedidos por día",
     dailyLimitReachedTitle: "Límite diario alcanzado",
     dailyLimitReachedMessage: "Ha alcanzado el límite de 4 pedidos por día. Por favor, vuelva mañana para enviar nuevos casos.",
-    statWaiting: "En espera",
+    statNone: "En espera",
   }
 };
 
