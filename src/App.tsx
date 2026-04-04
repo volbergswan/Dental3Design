@@ -99,8 +99,11 @@ export default function App() {
           // Gérer retour Stripe
           if (paymentStatus === 'success' && paymentUnitsParam) {
             const units = parseInt(paymentUnitsParam);
-            const newBalance = await handleStripeReturn(sessionProfile.id, units);
-            setProfile(prev => prev ? { ...prev, units: newBalance } : prev);
+            const result = await handleStripeReturn(params.get('session_id') || '');
+            if (result.success) {
+              const refreshed = await refreshClientProfile(sessionProfile.id);
+              setProfile(refreshed);
+            }  
             setPaymentUnits(units);
             setShowPaymentSuccessModal(true);
           }
@@ -254,8 +257,8 @@ export default function App() {
         await uploadCaseFile({
           caseId: newCase.id,
           file,
-          uploadedBy: 'client',
-          userId: profile.id,
+          uploadedBy: profile.id,
+          isFromAdmin: false,
         });
       }
 
@@ -284,7 +287,7 @@ export default function App() {
     if (!profile) return;
     setStripeLoading(priceId);
     try {
-      const url = await createCheckoutSession({
+      const { url } = await createCheckoutSession({
         priceId,
         units,
         clientId: profile.id,
